@@ -7,30 +7,27 @@ import java.io.UnsupportedEncodingException;
 import java.util.concurrent.TimeoutException;
 
 /**
- * Created by Administrator on 2017/6/6 0006.
+ * Created by Administrator on 2017/6/12 0012.
  */
-public class RabbitMqConsumerDirect {
-    public static  void main(String args[]) throws IOException, TimeoutException, InterruptedException {
+public class RabbitMQConsumerTopic1 {
+    public static void main(String[] args) throws IOException, TimeoutException {
         ConnectionFactory connectionFactory = new ConnectionFactory();
         connectionFactory.setHost("localhost");
-        connectionFactory.setPort(5672111);
+        connectionFactory.setPort(5672);
         connectionFactory.setUsername("root");
         connectionFactory.setPassword("root");
-        Connection connection = connectionFactory.newConnection();
-        Channel channel = connection.createChannel();
-        channel.exchangeDeclare("directExchange","direct");
-        channel.queueDeclare("directQueue", false, false, false, null);
-        channel.queueBind("directQueue","directExchange","directExchangeTest");
-        Consumer consumer = new DefaultConsumer(channel){
+        Connection connection =  connectionFactory.newConnection();
+        Channel channel =connection.createChannel();
+        channel.queueDeclare("topicQueue1",false,false,false,null);
+        channel.queueBind("topicQueue1","RabbitMQTopic","topic.key.*");
+        DefaultConsumer consumer = new DefaultConsumer(channel){
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body)
                     throws UnsupportedEncodingException {
                 System.out.println(new String(body,"utf-8"));
             }
         };
-        channel.basicConsume("directQueue", true, consumer);
-
-
+        channel.basicConsume("topicQueue1",consumer);
 
     }
 }
