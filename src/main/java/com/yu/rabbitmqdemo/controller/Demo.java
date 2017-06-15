@@ -21,6 +21,7 @@ public class Demo {
     @RequestMapping("/demo")
     public String demo() throws IOException, TimeoutException {
         String message = "The message of RabbitMQ test";
+        System.out.print("");
         boolean b = rmqSpringProducer.sendMessage(message);
        if(b){
            return "success";
