@@ -13,7 +13,7 @@ public class RabbitMqConsumerDirect {
     public static  void main(String args[]) throws IOException, TimeoutException, InterruptedException {
         ConnectionFactory connectionFactory = new ConnectionFactory();
         connectionFactory.setHost("localhost");
-        connectionFactory.setPort(5672111);
+        connectionFactory.setPort(5672);
         connectionFactory.setUsername("root");
         connectionFactory.setPassword("root");
         Connection connection = connectionFactory.newConnection();
