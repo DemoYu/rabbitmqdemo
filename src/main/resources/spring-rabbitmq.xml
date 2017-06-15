@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/rabbit
+                http://www.springframework.org/schema/rabbit/spring-rabbit-1.4.xsd">
+    <rabbit:connection-factory id="connectionFactory"
+        host="localhost" port="5672" username="root" password="root"
+    />
+    <rabbit:admin connection-factory="connectionFactory"/>
+
+    <!--direct模式-->
+    <rabbit:queue id="directQueue"  auto-delete="false" durable="false" name="directQueue" exclusive="false"/>
+    <rabbit:direct-exchange name="directExchange" durable="false" auto-delete="false" id="directExchange">
+            <rabbit:bindings>
+                <rabbit:binding queue="directQueue" key="directExchangeTest"></rabbit:binding>
+            </rabbit:bindings>
+    </rabbit:direct-exchange>
+    <rabbit:template connection-factory="connectionFactory" exchange="directExchange" id="rabbitTemplate"/>
+    <bean id="messageProducer" class="com.yu.rabbitmqdemo.service.RmqSpringProducer"/>
+ <!--   <bean id="messageConsumer" class="com.yu.maven_demo.service.RmqSpringConsumer"/>
+    <rabbit:listener-container connection-factory="connectionFactory">
+        <rabbit:listener ref="messageConsumer" queues="directQueue"/>
+    </rabbit:listener-container>-->
+</beans>
